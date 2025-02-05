@@ -1,4 +1,4 @@
-folder_parentpath<?php 
+<?php 
 include 'db_connect.php';
 $folder_parent = isset($_GET['fid'])? $_GET['fid'] : 0;
 $folders = $conn->query("SELECT * FROM folders where parent_id = $folder_parent and user_id = '".$_SESSION['login_id']."'  order by name asc");
@@ -80,32 +80,6 @@ a.custom-menu-list span.icon{
 </style>
 <div class="container-fluid"><br><br>
 	<div class="col-lg-12">
-		<div class="row">
-			<div class="card col-lg-12">
-				<div class="card-body" id="paths">
-				<!-- <a href="index.php?page=files" class="">..</a>/ -->
-				<?php 
-				$id=$folder_parent;
-				while($id > 0){
-
-					$path = $conn->query("SELECT * FROM folders where id = $id  order by name asc")->fetch_array();
-					echo '<script>
-						$("#paths").prepend("<a href=\"index.php?page=files&fid='.$path['id'].'\">'.$path['name'].'</a>/")
-					</script>';
-					$id = $path['parent_id'];
-
-				}
-				echo '<script>
-						$("#paths").prepend("<a href=\"index.php?page=files\">..</a>/")
-					</script>';
-				?>
-					
-				</div>
-			</div>
-			
-		</div>
-		<br>
-		<hr>
 		<div class="row">
 			<div class="col-lg-12">
 			<div class="col-md-4 col-10 offset-md-4 offset-1 input-group">
