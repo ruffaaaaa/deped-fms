@@ -113,58 +113,70 @@ a.custom-menu-list span.icon{
             <button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> New Folder</button>
             <button class="btn btn-primary btn-sm ml-4" id="new_file"><i class="fa fa-upload"></i> Upload File</button>
         </div>
-        <div class="row">
-            <div class="col-md-12 mt-2"><h5><b>Folders</b></h5></div>
-        </div>
-        <div class="row">
-            <?php while ($row = $folders->fetch_assoc()): ?>
-                <div class="col-md-3 col-sm-6 col-12 p-1" data-id="<?php echo $row['id'] ?>">
-                    <div class="card folder-item" data-id="<?php echo $row['id'] ?>">
-                        <div class="card-body">
-                            <large><span><i class="fa fa-folder"></i></span> <b class="to_folder"> <?php echo $row['name'] ?></b></large>
+        <?php if ($folders->num_rows > 0): ?>
+            <div class="row">
+                <div class="col-md-12 mt-2"><h6><b>Folders</b></h6></div>
+            </div>
+            <div class="row">
+                <?php while ($row = $folders->fetch_assoc()): ?>
+                    <div class="col-md-3 col-sm-6 col-12 p-1" data-id="<?php echo $row['id'] ?>">
+                        <div class="card folder-item" data-id="<?php echo $row['id'] ?>">
+                            <div class="card-body">
+                                <large><span><i class="fa fa-folder"></i></span> <b class="to_folder"> <?php echo $row['name'] ?></b></large>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php endwhile; ?>
-        </div>
+                <?php endwhile; ?>
+            </div>
+        <?php else: ?>
+            <div class="row">
+                <div class="col-md-12 mt-2"><h6><b></b></h6></div>
+            </div>
+        <?php endif; ?>
+
         <!-- files -->
+        <?php if ($files->num_rows > 0): ?>
         <div class="row">
-            <div class="col-md-12"><h5><b>Files</b></h5></div>
+            <div class="col-md-12 mt-2"><h6><b>Files</b></h6></div>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive"> <!-- Bootstrap responsive wrapper -->
-                            <table class="table table-hover">
-                                <thead class="">
-                                    <tr>
-                                        <th class="w-40">File Name</th>
-                                        <th class="w-20">Date</th>
-                                        <th class="w-20">Description</th>
-                                        <th class="w-20">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php while ($row = $files->fetch_assoc()): ?>
-                                    <tr class="file-item" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
-                                        <td><i class="fa fa-file"></i> <b class="to_file"> <?php echo $row['name'] ?></b></td>
-                                        <td><i class="to_file"><?php echo date('Y/m/d h:i A', strtotime($row['date_updated'])) ?></i></td>
-                                        <td><i class="to_file"><?php echo $row['description'] ?></i></td>
-                                        <td>
-                                            <button class="meatball-menu-btn btn btn-light" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
-                                                <i class="fa fa-ellipsis-h"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <?php endwhile; ?>
-                                </tbody>
-                            </table>
-                        </div> <!-- End table-responsive -->
-                    </div>
+            <div class="card col-md-12">
+                <div class="mt-2">
+                    <div class="table-responsive"> <!-- Bootstrap responsive wrapper -->
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="w-40">File Name</th>
+                                    <th class="w-20">Date</th>
+                                    <th class="w-20">Description</th>
+                                    <th class="w-20">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php while ($row = $files->fetch_assoc()): ?>
+                                <tr class="file-item" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
+                                    <td><i class="fa fa-file"></i> <b class="to_file"> <?php echo $row['name'] ?></b></td>
+                                    <td><i class="to_file"><?php echo date('Y/m/d h:i A', strtotime($row['date_updated'])) ?></i></td>
+                                    <td><i class="to_file"><?php echo $row['description'] ?></i></td>
+                                    <td>
+                                        <button class="meatball-menu-btn btn" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
+                                            <i class="fa fa-ellipsis-h"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <?php endwhile; ?>
+                            </tbody>
+                        </table>
+                    </div> 
                 </div>
             </div>
         </div>
+    <?php else: ?>
+        <div class="row">
+            <div class="col-md-12 mt-2"><h6><b></b></h6></div>
+        </div>
+    <?php endif; ?>
+
 
     </div>
 </div>
