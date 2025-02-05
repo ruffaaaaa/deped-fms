@@ -4,7 +4,7 @@ $folder_parent = isset($_GET['fid'])? $_GET['fid'] : 0;
 $folders = $conn->query("SELECT * FROM folders where parent_id = $folder_parent and user_id = '".$_SESSION['login_id']."'  order by name asc");
 
 
-$files = $conn->query("SELECT * FROM files where folder_id = $folder_parent and user_id = '".$_SESSION['login_id']."'  order by name asc");
+$files = $conn->query("SELECT * FROM files where is_public = '1'  order by name asc");
 
 ?>
 <style>
@@ -134,6 +134,22 @@ a.custom-menu-list span.icon{
 								</td>
 								<td><i class="to_file"><?php echo date('Y/m/d h:i A',strtotime($row['date_updated'])) ?></i></td>
 								<td><i class="to_file"><?php echo $row['description'] ?></i></td>
+								<td><i class="to_file">
+								<?php 
+									$query = "SELECT `name` FROM `users` WHERE id = " . $row['user_id'] . " ORDER BY name ASC";
+									$result = $conn->query($query);
+									
+									// Fetch the result
+									if ($result->num_rows > 0) {
+										$user = $result->fetch_assoc(); // Get the first (and probably only) row
+										echo $user['name'];  // Display the user's name
+									} else {
+										echo "Unknown";  // Handle case where no result is found
+									}
+									?>
+							</i></td>
+
+
 								<td>
 									<!-- Meatball menu (three vertical dots) -->
 									<button class="meatball-menu-btn" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>" data-path="<?php echo $row['file_path'] ?>"><i class="fa fa-ellipsis-h"></i></button>
@@ -148,16 +164,6 @@ a.custom-menu-list span.icon{
 
 	</div>
 </div>
-<!-- <div id="menu-folder-clone" style="display: none;">
-	<a href="javascript:void(0)" class="custom-menu-list file-option edit">Rename</a>
-	<a href="javascript:void(0)" class="custom-menu-list file-option delete">Delete</a>
-</div>
-<div id="menu-file-clone" style="display: none;">
-	<a href="javascript:void(0)" class="custom-menu-list file-option edit"><span><i class="fa fa-edit"></i> </span>Rename</a>
-	<a href="javascript:void(0)" class="custom-menu-list file-option download"><span><i class="fa fa-download"></i> </span>Download</a>
-	<a href="javascript:void(0)" class="custom-menu-list file-option delete"><span><i class="fa fa-trash"></i> </span>Delete</a>
-	<a href="javascript:void(0)" class="custom-menu-list file-option preview"><span><i class="fa fa-eye"></i> </span>Preview</a>
-</div> -->
 <div id="menu-folder-clone" style="display: none;">
     <a href="javascript:void(0)" class="custom-menu-list file-option edit">Rename</a>
     <?php if ($_SESSION['login_type'] == '1'): ?>
@@ -277,7 +283,6 @@ a.custom-menu-list span.icon{
     }
 });
 
-
     $('.rename_file').keypress(function(e) {
         var _this = $(this);
         if (e.which == 13) {
@@ -336,8 +341,6 @@ a.custom-menu-list span.icon{
 					$(this).closest('.card').toggle(true);
 					else
 					$(this).closest('.card').toggle(false);
-
-				
 			})
 			$('.to_file').each(function(){
 				var val  = $(this).text().toLowerCase()
@@ -345,27 +348,9 @@ a.custom-menu-list span.icon{
 					$(this).closest('tr').toggle(true);
 					else
 					$(this).closest('tr').toggle(false);
-
-				
 			})
 		})
 	})
-	function delete_folder($id){
-		start_load();
-		$.ajax({
-			url:'ajax.php?action=delete_folder',
-			method:'POST',
-			data:{id:$id},
-			success:function(resp){
-				if(resp == 1){
-					alert_toast("Folder successfully deleted.",'success')
-						setTimeout(function(){
-							location.reload()
-						},1500)
-				}
-			}
-		})
-	}
 	function delete_file($id){
 		start_load();
 		$.ajax({
@@ -495,7 +480,6 @@ a.custom-menu-list span.icon{
         }
     });
 		});
-
 
 	// Close the menu if the user clicks anywhere outside
 	$(document).click(function() {
