@@ -105,10 +105,6 @@ a.custom-menu-list span.icon{
 			
 		</div>
 		<br>
-		<div class="row">
-			<button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> New Folder</button>
-			<button class="btn btn-primary btn-sm ml-4" id="new_file"><i class="fa fa-upload"></i> Upload File</button>
-		</div>
 		<hr>
 		<div class="row">
 			<div class="col-lg-12">
@@ -122,19 +118,7 @@ a.custom-menu-list span.icon{
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-12"><h4><b>Folders</b></h4></div>
-		</div>
-		<hr>
-		<div class="row">
-			<?php 
-			while($row=$folders->fetch_assoc()):
-			?>
-				<div class="card col-md-3 mt-2 ml-2 mr-2 mb-2 folder-item" data-id="<?php echo $row['id'] ?>">
-					<div class="card-body">
-							<large><span><i class="fa fa-folder"></i></span><b class="to_folder"> <?php echo $row['name'] ?></b></large>
-					</div>
-				</div>
-			<?php endwhile; ?>
+			<div class="col-md-12"><h4><b>Shared Files</b></h4></div>
 		</div>
 		<hr>
 		<div class="row">
@@ -147,6 +131,7 @@ a.custom-menu-list span.icon{
 								<th width="40%" class="">Filename</th>
 								<th width="20%" class="">Date</th>
 								<th width="20%" class="">Description</th>
+								<th width="20%" class="">Owner</th>
 								<th width="20%" class="">Action</th>
 							</tr>
 							<?php 
@@ -237,42 +222,6 @@ a.custom-menu-list span.icon{
 	
 	var loginType = <?php echo $_SESSION['login_type']; ?>;
 	
-	$('#new_folder').click(function(){
-		uni_modal('','manage_folder.php?fid=<?php echo $folder_parent ?>')
-	})
-	$('#new_file').click(function(){
-		uni_modal('','manage_files.php?fid=<?php echo $folder_parent ?>')
-	})
-	$('.folder-item').click(function(){
-		location.href = 'index.php?page=files&fid='+$(this).attr('data-id')
-	})
-	
-	$('.folder-item').bind("contextmenu", function(event) { 
-		event.preventDefault();
-		$("div.custom-menu").hide();
-		var custom = $("<div class='custom-menu'></div>");
-		custom.append($('#menu-folder-clone').html());
-		custom.find('.edit').attr('data-id',$(this).attr('data-id'));
-		custom.find('.delete').attr('data-id',$(this).attr('data-id'));
-		
-		// Check login type and disable delete if not admin (login_type != 1)
-		if (loginType != 1) {
-			custom.find('.delete').hide();  // Hide delete button for non-admin users
-		}
-
-		custom.appendTo("body");
-		custom.css({top: event.pageY + "px", left: event.pageX + "px"});
-
-		$("div.custom-menu .edit").click(function(e){
-			e.preventDefault();
-			uni_modal('Rename Folder','manage_folder.php?fid=<?php echo $folder_parent ?>&id='+$(this).attr('data-id') );
-		});
-
-		$("div.custom-menu .delete").click(function(e){
-			e.preventDefault();
-			_conf("Are you sure to delete this Folder?", 'delete_folder', [$(this).attr('data-id')]);
-		});
-	});
 
 	//FILE
 	$('.file-item').bind("contextmenu", function(event) {
