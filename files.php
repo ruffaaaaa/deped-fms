@@ -1,11 +1,21 @@
-folder_parentpath<?php 
+<?php 
 include 'db_connect.php';
-$folder_parent = isset($_GET['fid'])? $_GET['fid'] : 0;
-$folders = $conn->query("SELECT * FROM folders where parent_id = $folder_parent and user_id = '".$_SESSION['login_id']."'  order by name asc");
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
-$files = $conn->query("SELECT * FROM files where folder_id = $folder_parent and user_id = '".$_SESSION['login_id']."'  order by name asc");
+$folder_parent = isset($_GET['fid']) ? $_GET['fid'] : 0;
+$login_id = $_SESSION['login_id'] ?? null;
+$login_type = $_SESSION['login_type'] ?? null; 
 
+if ($login_type == 1) {
+    $folders = $conn->query("SELECT * FROM folders WHERE parent_id = $folder_parent ORDER BY name ASC");
+    $files = $conn->query("SELECT * FROM files WHERE folder_id = $folder_parent ORDER BY name ASC"); // Admin sees all files
+} else {
+    $folders = $conn->query("SELECT * FROM folders WHERE parent_id = $folder_parent AND user_id = '$login_id' ORDER BY name ASC");
+    $files = $conn->query("SELECT * FROM files WHERE folder_id = $folder_parent AND user_id = '$login_id' ORDER BY name ASC");
+}
 ?>
 <style>
 	.folder-item{
@@ -47,7 +57,6 @@ a.custom-menu-list span.icon{
 		margin-right: 5px
 }
 
-/* Ensure the modal dialog itself is wide enough to support the PDF iframe */
 #image-preview-modal .modal-dialog {
     max-width: 90%; /* Or any larger value you prefer */
     width: 90%; /* Set the width of the modal dialog */
@@ -79,115 +88,75 @@ a.custom-menu-list span.icon{
 
 </style>
 <div class="container-fluid"><br><br>
-	<div class="col-lg-12">
-		<div class="row">
-			<div class="card col-lg-12">
-				<div class="card-body" id="paths">
-				<!-- <a href="index.php?page=files" class="">..</a>/ -->
-				<?php 
-				$id=$folder_parent;
-				while($id > 0){
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="card col-lg-12">
+                <div class="card-body" id="paths">
+                <?php 
+                $id = $folder_parent;
+                while ($id > 0) {
+                    $path = $conn->query("SELECT * FROM folders WHERE id = $id ORDER BY name ASC")->fetch_array();
+                    echo '<script>
+                        $("#paths").prepend("<a href=\"index.php?page=files&fid='.$path['id'].'\">'.$path['name'].'</a>/")
+                    </script>';
+                    $id = $path['parent_id'];
+                }
+                echo '<script>
+                        $("#paths").prepend("<a href=\"index.php?page=files\">..</a>/")
+                    </script>';
+                ?>
+                </div>
+            </div>
+        </div>
+        <br>
 
-					$path = $conn->query("SELECT * FROM folders where id = $id  order by name asc")->fetch_array();
-					echo '<script>
-						$("#paths").prepend("<a href=\"index.php?page=files&fid='.$path['id'].'\">'.$path['name'].'</a>/")
-					</script>';
-					$id = $path['parent_id'];
+        <div class="row">
+            <button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> New Folder</button>
+            <button class="btn btn-primary btn-sm ml-4" id="new_file"><i class="fa fa-upload"></i> Upload File</button>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12"><h4><b>Folders</b></h4></div>
+        </div>
+        <hr>
+        <div class="row">
+            <?php while ($row = $folders->fetch_assoc()): ?>
+                <div class="card col-md-3 mt-2 ml-2 mr-2 mb-2 folder-item" data-id="<?php echo $row['id'] ?>">
+                    <div class="card-body">
+                        <large><span><i class="fa fa-folder"></i></span><b class="to_folder"> <?php echo $row['name'] ?></b></large>
+                    </div>
+                </div>
+            <?php endwhile; ?>
+        </div>
+        <hr>
 
-				}
-				echo '<script>
-						$("#paths").prepend("<a href=\"index.php?page=files\">..</a>/")
-					</script>';
-				?>
-					
-				</div>
-			</div>
-			
-		</div>
-		<br>
-		<div class="row">
-			<button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> New Folder</button>
-			<button class="btn btn-primary btn-sm ml-4" id="new_file"><i class="fa fa-upload"></i> Upload File</button>
-		</div>
-		<hr>
-		<div class="row">
-			<div class="col-lg-12">
-			<div class="col-md-4 col-10 offset-md-4 offset-1 input-group">
-			<input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-			<div class="input-group-append">
-				<span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa fa-search"></i></span>
-			</div>
-			</div>
-
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12"><h4><b>Folders</b></h4></div>
-		</div>
-		<hr>
-		<div class="row">
-			<?php 
-			while($row=$folders->fetch_assoc()):
-			?>
-				<div class="card col-md-3 mt-2 ml-2 mr-2 mb-2 folder-item" data-id="<?php echo $row['id'] ?>">
-					<div class="card-body">
-							<large><span><i class="fa fa-folder"></i></span><b class="to_folder"> <?php echo $row['name'] ?></b></large>
-					</div>
-				</div>
-			<?php endwhile; ?>
-		</div>
-		<hr>
-		<div class="row">
-			<div class="card col-md-12">
-				<div class="card-body">
-					<!-- Scrollable container -->
-					<div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
-						<table width="100%" class="table-responsive">
-							<tr>
-								<th width="40%" class="">Filename</th>
-								<th width="20%" class="">Date</th>
-								<th width="20%" class="">Description</th>
-								<th width="20%" class="">Action</th>
-							</tr>
-							<?php 
-							while($row=$files->fetch_assoc()):
-								$name = explode(' ||',$row['name']);
-								$name = isset($name[1]) ? $name[0] ." (".$name[1].").".$row['file_type'] : $name[0] .".".$row['file_type'];
-								$img_arr = array('png','jpg','jpeg','gif','psd','tif');
-								$doc_arr =array('doc','docx');
-								$pdf_arr =array('pdf','ps','eps','prn');
-								$icon ='fa-file';
-								if(in_array(strtolower($row['file_type']),$img_arr))
-									$icon ='fa-image';
-								if(in_array(strtolower($row['file_type']),$doc_arr))
-									$icon ='fa-file-word';
-								if(in_array(strtolower($row['file_type']),$pdf_arr))
-									$icon ='fa-file-pdf';
-								if(in_array(strtolower($row['file_type']),['xlsx','xls','xlsm','xlsb','xltm','xlt','xla','xlr']))
-									$icon ='fa-file-excel';
-								if(in_array(strtolower($row['file_type']),['zip','rar','tar']))
-									$icon ='fa-file-archive';
-							?>
-							<tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>" data-path="<?php echo $row['file_path'] ?>">
-								
-								<td><large><span><i class="fa <?php echo $icon ?>"></i></span><b class="to_file"> <?php echo $name ?></b></large>
-								<input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['id'] ?>" data-type="<?php echo $row['file_type'] ?>" data-path="<?php echo $row['file_path'] ?>" style="display: none">
-								</td>
-								<td><i class="to_file"><?php echo date('Y/m/d h:i A',strtotime($row['date_updated'])) ?></i></td>
-								<td><i class="to_file"><?php echo $row['description'] ?></i></td>
-								<td>
-									<!-- Meatball menu (three vertical dots) -->
-									<button class="meatball-menu-btn" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>" data-path="<?php echo $row['file_path'] ?>"><i class="fa fa-ellipsis-h"></i></button>
-								</td>
-							</tr>
-							<?php endwhile; ?>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-
-	</div>
+        <div class="row">
+            <div class="card col-md-12">
+                <div class="card-body">
+                    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                        <table width="100%" class="table-responsive">
+                            <tr>
+                                <th width="40%" class="">Filename</th>
+                                <th width="20%" class="">Date</th>
+                                <th width="20%" class="">Description</th>
+                                <th width="20%" class="">Action</th>
+                            </tr>
+                            <?php while ($row = $files->fetch_assoc()): ?>
+                            <tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
+                                <td><large><span><i class="fa fa-file"></i></span><b class="to_file"> <?php echo $row['name'] ?></b></large></td>
+                                <td><i class="to_file"><?php echo date('Y/m/d h:i A', strtotime($row['date_updated'])) ?></i></td>
+                                <td><i class="to_file"><?php echo $row['description'] ?></i></td>
+                                <td>
+                                    <button class="meatball-menu-btn" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>"><i class="fa fa-ellipsis-h"></i></button>
+                                </td>
+                            </tr>
+                            <?php endwhile; ?>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- <div id="menu-folder-clone" style="display: none;">
 	<a href="javascript:void(0)" class="custom-menu-list file-option edit">Rename</a>
