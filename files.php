@@ -41,7 +41,6 @@ a.custom-menu-list {
     color: #4c4b4b;
     font-weight: 600;
     font-size: 1em;
-    padding: 1px 11px;
 }
 .file-item{
 	cursor: pointer;
@@ -114,48 +113,59 @@ a.custom-menu-list span.icon{
             <button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> New Folder</button>
             <button class="btn btn-primary btn-sm ml-4" id="new_file"><i class="fa fa-upload"></i> Upload File</button>
         </div>
-        <hr>
         <div class="row">
-            <div class="col-md-12"><h4><b>Folders</b></h4></div>
+            <div class="col-md-12 mt-2"><h5><b>Folders</b></h5></div>
         </div>
-        <hr>
         <div class="row">
             <?php while ($row = $folders->fetch_assoc()): ?>
-                <div class="card col-md-3 mt-2 ml-2 mr-2 mb-2 folder-item" data-id="<?php echo $row['id'] ?>">
-                    <div class="card-body">
-                        <large><span><i class="fa fa-folder"></i></span><b class="to_folder"> <?php echo $row['name'] ?></b></large>
+                <div class="col-md-3 mb-3"> <!-- 4 columns per row -->
+                    <div class="card folder-item" data-id="<?php echo $row['id'] ?>">
+                        <div class="card-body">
+                            <large><span><i class="fa fa-folder"></i></span> <b class="to_folder"> <?php echo $row['name'] ?></b></large>
+                        </div>
                     </div>
                 </div>
             <?php endwhile; ?>
         </div>
-        <hr>
-
+        <!-- files -->
         <div class="row">
-            <div class="card col-md-12">
-                <div class="card-body">
-                    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
-                        <table width="100%" class="table-responsive">
-                            <tr>
-                                <th width="40%" class="">Filename</th>
-                                <th width="20%" class="">Date</th>
-                                <th width="20%" class="">Description</th>
-                                <th width="20%" class="">Action</th>
-                            </tr>
-                            <?php while ($row = $files->fetch_assoc()): ?>
-                            <tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
-                                <td><large><span><i class="fa fa-file"></i></span><b class="to_file"> <?php echo $row['name'] ?></b></large></td>
-                                <td><i class="to_file"><?php echo date('Y/m/d h:i A', strtotime($row['date_updated'])) ?></i></td>
-                                <td><i class="to_file"><?php echo $row['description'] ?></i></td>
-                                <td>
-                                    <button class="meatball-menu-btn" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>"><i class="fa fa-ellipsis-h"></i></button>
-                                </td>
-                            </tr>
-                            <?php endwhile; ?>
-                        </table>
+            <div class="col-md-12"><h5><b>Files</b></h5></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive"> <!-- Bootstrap responsive wrapper -->
+                            <table class="table table-hover">
+                                <thead class="">
+                                    <tr>
+                                        <th class="w-40">File Name</th>
+                                        <th class="w-20">Date</th>
+                                        <th class="w-20">Description</th>
+                                        <th class="w-20">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php while ($row = $files->fetch_assoc()): ?>
+                                    <tr class="file-item" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
+                                        <td><i class="fa fa-file"></i> <b class="to_file"> <?php echo $row['name'] ?></b></td>
+                                        <td><i class="to_file"><?php echo date('Y/m/d h:i A', strtotime($row['date_updated'])) ?></i></td>
+                                        <td><i class="to_file"><?php echo $row['description'] ?></i></td>
+                                        <td>
+                                            <button class="meatball-menu-btn btn btn-light" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
+                                                <i class="fa fa-ellipsis-h"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <?php endwhile; ?>
+                                </tbody>
+                            </table>
+                        </div> <!-- End table-responsive -->
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 <!-- <div id="menu-folder-clone" style="display: none;">

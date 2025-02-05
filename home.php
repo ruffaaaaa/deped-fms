@@ -7,13 +7,11 @@
   .row {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Center the row items */
     margin: 0;
   }
 
   .col-lg-12 {
     display: flex;
-    justify-content: center; /* Center the items inside the column */
     width: 100%;
   }
 

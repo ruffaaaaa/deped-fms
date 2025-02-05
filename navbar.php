@@ -4,11 +4,13 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 250px;
+    width: 230px;
     height: 100%;
     background-color: #343a40;
-    z-index: 1000;
+    z-index: 900;
     transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
   }
 
   /* Sidebar list styles */
@@ -16,19 +18,24 @@
     list-style: none;
     padding: 0;
     margin-top: 60px; /* Add some space from top */
+    display: flex;
+    flex-direction: column;
   }
 
   .nav-item {
-    display: block;
+    display: flex;
+    align-items: center; /* Align the text and icon vertically */
     padding: 10px 15px;
     text-decoration: none;
     color: white;
-    font-size: 18px;
+    font-size: 14px;
+    width: 100%; /* Ensure the nav item spans the full width */
   }
 
   .nav-item:hover,
   .nav-item.active {
-    background-color: white;
+    background-color: #007bff; /* Add a blue background on hover or active */
+    color: white; /* Make text white when active */
   }
 
   .icon-field {
@@ -43,10 +50,10 @@
     right: 20px;
     z-index: 1500;
     cursor: pointer;
-	border: none;
-	background-color: #343a40;
-	color: white;
-	font-size: 20px;
+    border: none;
+    background-color: #343a40;
+    color: white;
+    font-size: 20px;
   }
 
   .burger-menu i {
@@ -57,6 +64,7 @@
   /* Content container */
   #content {
     transition: margin-left 0.3s ease; /* Smooth transition for content */
+    margin-left: 0; /* Default margin */
   }
 
   /* Media query for mobile */
@@ -71,51 +79,75 @@
 
     /* Shift content to the right when sidebar is active */
     #content.active {
-      margin-left: 250px; /* Push content right to make room for the sidebar */
+      margin-left: 230px; /* Push content right to make room for the sidebar */
     }
 
     .burger-menu {
       display: block; /* Show the burger icon */
     }
   }
+
 </style>
 
-
-<!-- Burger Menu -->
+<div>
 <button class="burger-menu" id="burger-icon">
   <i class="fa fa-bars"></i>
 </button>
+</div>
 
 <!-- Sidebar -->
-<nav id="sidebar" class="mx-lt-5 bg-dark">
+<nav id="sidebar" class="bg-dark">
   <div class="sidebar-list">
-    <a href="index.php?page=home" class="nav-item nav-home"><span class="icon-field"><i class="fa fa-home"></i></span> Dashboard</a>
-    <a href="index.php?page=files" class="nav-item nav-files"><span class="icon-field"><i class="fa fa-file"></i></span> Files</a>
-    <a href="index.php?page=shared_files" class="nav-item nav-shared_files"><span class="icon-field"><i class="fa fa-share-alt"></i></span> Shared Files</a>
-    <?php if ($_SESSION['login_type'] == 1): ?>
-      <a href="index.php?page=users" class="nav-item nav-users"><span class="icon-field"><i class="fa fa-users"></i></span> Users</a>
+    <a href="index.php?page=home" class="nav-item nav-home">
+      <span class="icon-field">
+        <i class="fa fa-home"></i>
+      </span> Dashboard
+    </a>
+    <a href="index.php?page=files" class="nav-item nav-files">
+      <span class="icon-field">
+        <i class="fa fa-file"></i>
+      </span> Files
+    </a>
+    <a href="index.php?page=shared_files" class="nav-item nav-shared_files">
+      <span class="icon-field">
+        <i class="fa fa-share-alt"></i>
+      </span> Shared Files
+    </a>
+    <?php if (isset($_SESSION['login_type']) && $_SESSION['login_type'] == 1): ?>
+      <a href="index.php?page=users" class="nav-item nav-users">
+        <span class="icon-field">
+          <i class="fa fa-users"></i>
+        </span> Users
+      </a>
     <?php endif; ?>
-	<a href="ajax.php?action=logout" class="nav-item logout-link"> 
-	<i class="fa fa-power-off"></i>
-                    <?php echo $_SESSION['login_name'] ?> </a>
+    <a href="ajax.php?action=logout" class="nav-item logout-link d-flex align-items-center">
+      <span class="icon-field">
+        <i class="fa fa-power-off"></i>
+      </span> 
+      <span class="ms-2"><?php echo htmlspecialchars($_SESSION['login_name'] ?? 'Logout'); ?></span>
+    </a>
   </div>
 </nav>
+
 
 <!-- Main content -->
 <div id="content">
   <!-- Your page content goes here -->
 </div>
 
-
 <!-- JavaScript -->
 <script>
   $(document).ready(function() {
-    $('.nav-<?php echo isset($_GET['page']) ? $_GET['page'] : ''; ?>').addClass('active');
+    // Highlight the active page link based on the URL
+    var page = "<?php echo isset($_GET['page']) ? $_GET['page'] : ''; ?>";
+    if (page) {
+      $('.nav-' + page).addClass('active');
+    }
 
+    // Toggle sidebar visibility on burger menu click
     $('#burger-icon').click(function() {
       $('#sidebar').toggleClass('active');
       $('#content').toggleClass('active');
     });
   });
 </script>
-

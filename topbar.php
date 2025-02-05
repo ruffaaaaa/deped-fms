@@ -22,7 +22,6 @@
         color: #fff;
     }
 
-    /* Make the navbar elements center-align on small screens */
     @media (max-width: 768px) {
         .navbar-brand {
             flex-direction: column;
@@ -51,12 +50,10 @@
                 </div>
             </div>
 
-            <!-- Title Section -->
             <div class="col-md-8 col-6 d-flex justify-content-center align-items-center">
                 <p class="m-0 text-white">File Management System</p>
             </div>
 
-            <!-- Logout Section -->
             <!-- <div class="col-md-3 col-3 d-flex justify-content-center align-items-center">
                 <a href="ajax.php?action=logout" class="logout-link">
                     <?php /* echo $_SESSION['login_name'] */ ?> <i class="fa fa-power-off"></i>
