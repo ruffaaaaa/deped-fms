@@ -118,7 +118,7 @@ a.custom-menu-list span.icon{
         </div>
         <div class="row">
             <?php while ($row = $folders->fetch_assoc()): ?>
-                <div class="col-md-3 mb-3"> <!-- 4 columns per row -->
+                <div class="col-md-3 col-sm-6 col-12 p-1" data-id="<?php echo $row['id'] ?>">
                     <div class="card folder-item" data-id="<?php echo $row['id'] ?>">
                         <div class="card-body">
                             <large><span><i class="fa fa-folder"></i></span> <b class="to_folder"> <?php echo $row['name'] ?></b></large>
