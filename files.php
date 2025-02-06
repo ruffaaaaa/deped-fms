@@ -41,6 +41,7 @@ a.custom-menu-list {
     color: #4c4b4b;
     font-weight: 600;
     font-size: 1em;
+    padding: 1px 11px;
 }
 .file-item{
 	cursor: pointer;
@@ -83,7 +84,26 @@ a.custom-menu-list span.icon{
     height: 80vh;  /* Adjust height for PDF preview to make it taller */
 }
 
+/* start folder button icon */
+.icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 25px; 
+        height: 25px; 
+        border: none;
+        border-radius: 30%;
+        color: black;
+        font-size: 12px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        margin-left:5px;
+    }
 
+    .icon-btn:hover {
+        background-color: #0056b3;
+    }
+/* end folder button icon*/
 
 </style>
 <div class="container-fluid"><br><br>
@@ -101,7 +121,7 @@ a.custom-menu-list span.icon{
                     $id = $path['parent_id'];
                 }
                 echo '<script>
-                        $("#paths").prepend("<a href=\"index.php?page=files\">..</a>/")
+                        $("#paths").prepend("<a href=\"index.php?page=files\">🏠︎</a>/")
                     </script>';
                 ?>
                 </div>
@@ -113,71 +133,52 @@ a.custom-menu-list span.icon{
             <button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> New Folder</button>
             <button class="btn btn-primary btn-sm ml-4" id="new_file"><i class="fa fa-upload"></i> Upload File</button>
         </div>
-        <?php if ($folders->num_rows > 0): ?>
-            <div class="row">
-                <div class="col-md-12 mt-2"><h6><b>Folders</b></h6></div>
-            </div>
-            <div class="row">
-                <?php while ($row = $folders->fetch_assoc()): ?>
-                    <div class="col-md-3 col-sm-6 col-12 p-1" data-id="<?php echo $row['id'] ?>">
-                        <div class="card folder-item" data-id="<?php echo $row['id'] ?>">
-                            <div class="card-body">
-                                <large><span><i class="fa fa-folder"></i></span> <b class="to_folder"> <?php echo $row['name'] ?></b></large>
-                            </div>
-                        </div>
-                    </div>
-                <?php endwhile; ?>
-            </div>
-        <?php else: ?>
-            <div class="row">
-                <div class="col-md-12 mt-2"><h6><b></b></h6></div>
-            </div>
-        <?php endif; ?>
-
-        <!-- files -->
-        <?php if ($files->num_rows > 0): ?>
+        <hr>
         <div class="row">
-            <div class="col-md-12 mt-2"><h6><b>Files</b></h6></div>
+            <div class="col-md-12"><h4><b>Folders</b></h4></div>
         </div>
+        <hr>
+        <div class="row">
+    <?php while ($row = $folders->fetch_assoc()): ?>
+        <div class="card col-md-3 mt-2 ml-2 mr-2 mb-2 folder-item" data-id="<?php echo $row['id'] ?>">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <large>
+                    <span><i class="fa fa-folder"></i></span>
+                    <b class="to_folder"><?php echo $row['name'] ?></b>
+                </large>
+                <button class="icon-btn menu-btn"><i class="fa fa-ellipsis-v"></i></button>
+            </div>
+        </div>
+    <?php endwhile; ?>
+</div>
+
+        <hr>
         <div class="row">
             <div class="card col-md-12">
-                <div class="mt-2">
-                    <div class="table-responsive"> <!-- Bootstrap responsive wrapper -->
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="w-40">File Name</th>
-                                    <th class="w-20">Date</th>
-                                    <th class="w-20">Description</th>
-                                    <th class="w-20">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php while ($row = $files->fetch_assoc()): ?>
-                                <tr class="file-item" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
-                                    <td><i class="fa fa-file"></i> <b class="to_file"> <?php echo $row['name'] ?></b></td>
-                                    <td><i class="to_file"><?php echo date('Y/m/d h:i A', strtotime($row['date_updated'])) ?></i></td>
-                                    <td><i class="to_file"><?php echo $row['description'] ?></i></td>
-                                    <td>
-                                        <button class="meatball-menu-btn btn" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
-                                            <i class="fa fa-ellipsis-h"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <?php endwhile; ?>
-                            </tbody>
+                <div class="card-body">
+                    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                        <table width="100%" class="table-responsive">
+                            <tr>
+                                <th width="40%" class="">Filename</th>
+                                <th width="20%" class="">Date</th>
+                                <th width="20%" class="">Description</th>
+                                <th width="20%" class="">Action</th>
+                            </tr>
+                            <?php while ($row = $files->fetch_assoc()): ?>
+                            <tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
+                                <td><large><span><i class="fa fa-file"></i></span><b class="to_file"> <?php echo $row['name'] ?></b></large></td>
+                                <td><i class="to_file"><?php echo date('Y/m/d h:i A', strtotime($row['date_updated'])) ?></i></td>
+                                <td><i class="to_file"><?php echo $row['description'] ?></i></td>
+                                <td>
+                                    <button class="meatball-menu-btn" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>"><i class="fa fa-ellipsis-h"></i></button>
+                                </td>
+                            </tr>
+                            <?php endwhile; ?>
                         </table>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>
-    <?php else: ?>
-        <div class="row">
-            <div class="col-md-12 mt-2"><h6><b></b></h6></div>
-        </div>
-    <?php endif; ?>
-
-
     </div>
 </div>
 <!-- <div id="menu-folder-clone" style="display: none;">
@@ -196,8 +197,9 @@ a.custom-menu-list span.icon{
         <a href="javascript:void(0)" class="custom-menu-list file-option delete">Delete</a>
     <?php endif; ?>
 </div>
+
 <div id="menu-file-clone" style="display: none;">
-    <a href="javascript:void(0)" class="custom-menu-list file-option edit"><span><i class="fa fa-edit"></i> </span>Rename</a>
+    <a href="javascript:void(0)" class="custom-menu-list file-option edit"><span><i class="fa fa-edit"></i> </span>Rename </a>
     <a href="javascript:void(0)" class="custom-menu-list file-option download"><span><i class="fa fa-download"></i> </span>Download</a>
     <?php if ($_SESSION['login_type'] == '1'): ?>
         <a href="javascript:void(0)" class="custom-menu-list file-option delete"><span><i class="fa fa-trash"></i> </span>Delete</a>
@@ -225,45 +227,71 @@ a.custom-menu-list span.icon{
 </div>
 
 <script>
-	
-	var loginType = <?php echo $_SESSION['login_type']; ?>;
-	
-	$('#new_folder').click(function(){
-		uni_modal('','manage_folder.php?fid=<?php echo $folder_parent ?>')
-	})
-	$('#new_file').click(function(){
-		uni_modal('','manage_files.php?fid=<?php echo $folder_parent ?>')
-	})
-	$('.folder-item').click(function(){
-		location.href = 'index.php?page=files&fid='+$(this).attr('data-id')
-	})
-	
-	$('.folder-item').bind("contextmenu", function(event) { 
-		event.preventDefault();
-		$("div.custom-menu").hide();
-		var custom = $("<div class='custom-menu'></div>");
-		custom.append($('#menu-folder-clone').html());
-		custom.find('.edit').attr('data-id',$(this).attr('data-id'));
-		custom.find('.delete').attr('data-id',$(this).attr('data-id'));
-		
-		// Check login type and disable delete if not admin (login_type != 1)
-		if (loginType != 1) {
-			custom.find('.delete').hide();  // Hide delete button for non-admin users
-		}
+var loginType = <?php echo $_SESSION['login_type']; ?>;
 
-		custom.appendTo("body");
-		custom.css({top: event.pageY + "px", left: event.pageX + "px"});
+$('#new_folder').click(function(){
+    uni_modal('', 'manage_folder.php?fid=<?php echo $folder_parent ?>')
+});
+$('#new_file').click(function(){
+    uni_modal('', 'manage_files.php?fid=<?php echo $folder_parent ?>')
+});
+$('.folder-item').click(function(){
+    location.href = 'index.php?page=files&fid='+$(this).attr('data-id')
+});
 
-		$("div.custom-menu .edit").click(function(e){
-			e.preventDefault();
-			uni_modal('Rename Folder','manage_folder.php?fid=<?php echo $folder_parent ?>&id='+$(this).attr('data-id') );
-		});
+// Right-click event for folders
+$('.folder-item').bind("contextmenu", function(event) { 
+    event.preventDefault();
+    showCustomMenu(event.pageX, event.pageY, $(this).attr('data-id'));
+});
 
-		$("div.custom-menu .delete").click(function(e){
-			e.preventDefault();
-			_conf("Are you sure to delete this Folder?", 'delete_folder', [$(this).attr('data-id')]);
-		});
-	});
+// Click event for the edit button
+$('.folder-item .icon-btn').click(function(event) {
+    event.stopPropagation(); // Prevent event bubbling
+    var parentFolder = $(this).closest('.folder-item');
+    var folderId = parentFolder.attr('data-id');
+
+    // Get button position to show the menu near it
+    var buttonOffset = $(this).offset();
+    var posX = buttonOffset.left;
+    var posY = buttonOffset.top + $(this).outerHeight(); 
+
+    showCustomMenu(posX, posY, folderId);
+});
+
+// Function to show the menu (used by both right-click and button click)
+function showCustomMenu(x, y, folderId) {
+    $("div.custom-menu").hide();
+    var custom = $("<div class='custom-menu'></div>");
+    custom.append($('#menu-folder-clone').html());
+
+    custom.find('.edit').attr('data-id', folderId);
+    custom.find('.delete').attr('data-id', folderId);
+
+    // Check login type and hide delete if not admin
+    if (loginType != 1) {
+        custom.find('.delete').hide();
+    }
+
+    custom.appendTo("body");
+    custom.css({ top: y + "px", left: x + "px" });
+
+    $("div.custom-menu .edit").click(function(e) {
+        e.preventDefault();
+        uni_modal('Rename Folder', 'manage_folder.php?fid=<?php echo $folder_parent ?>&id=' + $(this).attr('data-id'));
+    });
+
+    $("div.custom-menu .delete").click(function(e) {
+        e.preventDefault();
+        _conf("Are you sure to delete this Folder?", 'delete_folder', [$(this).attr('data-id')]);
+    });
+}
+
+// Hide menu when clicking elsewhere
+$(document).click(function() {
+    $("div.custom-menu").hide();
+});
+
 
 	//FILE
 	$('.file-item').bind("contextmenu", function(event) {
