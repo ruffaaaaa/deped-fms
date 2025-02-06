@@ -20,8 +20,6 @@ if ($login_type == 1) {
 <style>
 	.folder-item{
 		cursor: pointer;
-        background-color: white;
-        margin-right: 3px;
 	}
 	.folder-item:hover{
 		background: #eaeaea;
@@ -105,6 +103,7 @@ a.custom-menu-list span.icon{
     .icon-btn:hover {
         background-color: #0056b3;
     }
+/* end folder button icon*/
 
 </style>
 <div class="container-fluid"><br><br>
@@ -134,74 +133,63 @@ a.custom-menu-list span.icon{
             <button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> New Folder</button>
             <button class="btn btn-primary btn-sm ml-4" id="new_file"><i class="fa fa-upload"></i> Upload File</button>
         </div>
-        <?php if ($folders->num_rows >0): ?>
-        <div class="row mt-3">
+        <hr>
+        <div class="row">
             <div class="col-md-12"><h4><b>Folders</b></h4></div>
         </div>
+        <hr>
         <div class="row">
-            <?php while ($row = $folders->fetch_assoc()): ?>
-                <div class="col-md-3 col-sm-6 col-12 p-1" data-id="<?php echo $row['id'] ?>">
-                    <div class="card folder-item" data-id="<?php echo $row['id'] ?>">
-                        <div class="card-body d-flex justify-content-between">
-                            <large><span><i class="fa fa-folder"></i></span> <b class="to_folder"> <?php echo $row['name'] ?></b></large>
-                            <button class="icon-btn menu-btn"><i class="fa fa-ellipsis-v"></i></button>
+    <?php while ($row = $folders->fetch_assoc()): ?>
+        <div class="card col-md-3 mt-2 ml-2 mr-2 mb-2 folder-item" data-id="<?php echo $row['id'] ?>">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <large>
+                    <span><i class="fa fa-folder"></i></span>
+                    <b class="to_folder"><?php echo $row['name'] ?></b>
+                </large>
+                <button class="icon-btn menu-btn"><i class="fa fa-ellipsis-v"></i></button>
+            </div>
+        </div>
+    <?php endwhile; ?>
+</div>
 
-                        </div>
-                    </div>
-                    
-                </div>
-            <?php endwhile; ?>
-        </div>
-        <?php else: ?>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="alert alert-info">No Folders Found</div>
-                </div>
-            </div>
-        <?php endif; ?>
-        
-        <?php if ($files->num_rows > 0): ?>
-        <div class="row mt-2">
-            <div class="col-md-12"><h4><b>Folders</b></h4></div>
-        </div>
+        <hr>
         <div class="row">
-            <div class="card col-md-12">
-                <div class="mt-2">
-                    <div class="table-responsive"> <!-- Bootstrap responsive wrapper -->
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="w-40">File Name</th>
-                                    <th class="w-20">Date</th>
-                                    <th class="w-20">Description</th>
-                                    <th class="w-20">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php while ($row = $files->fetch_assoc()): ?>
-                                <tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
-                                    <td><large><span><i class="fa fa-file"></i></span><b class="to_file"> <?php echo $row['name'] ?></b></large></td>
-                                    <td><i class="to_file"><?php echo date('Y/m/d h:i A', strtotime($row['date_updated'])) ?></i></td>
-                                    <td><i class="to_file"><?php echo $row['description'] ?></i></td>
-                                    <td>
-                                        <button class="meatball-menu-btn" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>"><i class="fa fa-ellipsis-h"></i></button>
-                                    </td>
-                                </tr>
-                                <?php endwhile; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+    <div class="card col-md-12">
+        <div class="card-body">
+            <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                <table width="100%" class="table-responsive">
+                    <tr>
+                        <th width="40%" class="">Filename</th>
+                        <th width="20%" class="">Date</th>
+                        <th width="20%" class="">Description</th>
+                        <th width="10%" class="">Action</th>
+                    </tr>
+                    <?php while ($row = $files->fetch_assoc()): 
+                        // Extract file extension
+                        $fileExtension = pathinfo($row['file_path'], PATHINFO_EXTENSION);
+                    ?>
+                    <tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
+                        <td>
+                            <large>
+                                <span><i class="fa fa-file"></i></span>
+                                <b class="to_file"> <?php echo $row['name'] ?>.<?php echo($fileExtension) ?></b>
+                            </large>
+                        </td>
+                        <td><i class="to_file"><?php echo date('Y/m/d h:i A', strtotime($row['date_updated'])) ?></i></td>
+                        <td><i class="to_file"><?php echo $row['description'] ?></i></td>
+                        <td>
+                            <button class="meatball-menu-btn" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <?php endwhile; ?>
+                </table>
             </div>
         </div>
-        <?php else: ?>
-            <div class="row">
-                <div class="col-md-12">
-                    <!-- <div class="alert alert-info">No Folders Found</div> -->
-                </div>
-            </div>
-        <?php endif; ?>
     </div>
+</div>
+
 </div>
 <!-- <div id="menu-folder-clone" style="display: none;">
 	<a href="javascript:void(0)" class="custom-menu-list file-option edit">Rename</a>
@@ -243,10 +231,15 @@ a.custom-menu-list span.icon{
             <div class="modal-body">
                 <img id="preview-image" src="" alt="File Preview" style="width: 100%; height: auto; display: none;">
                 <iframe id="preview-pdf" src="" style="width: 100%; height: 500px; display: none;"></iframe>
+                <video id="preview-video" controls style="width: 100%; display: none;"></video>
+                <audio id="preview-audio" controls style="width: 100%; display: none;"></audio>
+                <iframe id="preview-doc" src="" style="width: 100%; height: 500px; display: none;"></iframe>
             </div>
         </div>
     </div>
 </div>
+
+
 
 <script>
 var loginType = <?php echo $_SESSION['login_type']; ?>;
@@ -348,10 +341,13 @@ $(document).click(function() {
         _conf("Are you sure to delete this file?", 'delete_file', [$(this).attr('data-id')]);
     });
 
-    custom.find('.download').click(function(e) {
-        e.preventDefault();
-        window.open('download.php?id=' + $(this).attr('data-id'));
-    });
+// Attach the download functionality once using event delegation
+$('body').on('click', 'div.custom-menu .download', function(e) {
+    e.preventDefault();
+    var fileId = $(this).attr('data-id');
+    window.open('download.php?id=' + fileId);
+});
+
 
     // Preview option click handler
 	custom.find('.preview').click(function(e) {
@@ -373,7 +369,6 @@ $(document).click(function() {
 
     // Prepend the folder path to the file path
     var fullPath = 'assets/uploads/' + filePath;
-
     var fileExtension = filePath.split('.').pop().toLowerCase();
     var allowedImageTypes = ['png', 'jpg', 'jpeg', 'gif'];
     var allowedPdfType = 'pdf';
@@ -484,6 +479,7 @@ $(document).click(function() {
 			}
 		})
 	}
+
 	function delete_file($id){
 		start_load();
 		$.ajax({
@@ -543,47 +539,70 @@ $(document).click(function() {
 				window.open('download.php?id=' + $(this).attr('data-id'));
 			});
 
-			// Preview option click handler (with event delegation)
-			$('body').on('click', 'div.custom-menu .preview', function(e) {
-				e.preventDefault();
-				var fileId = $(this).attr('data-id');
-				var fileName = $(this).attr('data-name');
-				var filePath = $(this).attr('data-path');
 
-				// Debugging logs
-				console.log('Preview clicked');
-				console.log('File ID:', fileId);
-				console.log('File Name:', fileName);
-				console.log('File Path:', filePath);
+// start js to preview files
+$('body').on('click', 'div.custom-menu .preview', function(e) {
+    e.preventDefault();
+    var fileId = $(this).attr('data-id');
+    var fileName = $(this).attr('data-name');
+    var filePath = $(this).attr('data-path');
 
-				if (!filePath) {
-					console.error('File path is undefined. Check the .file-item element for a data-path attribute.');
-					return; // Stop execution if filePath is undefined
-				}
+    console.log('Preview clicked:', fileId, fileName, filePath);
 
-				// Prepend the folder path to the file path
-				var fullPath = 'assets/uploads/' + filePath;
+    if (!filePath) {
+        console.error('File path is undefined.');
+        return;
+    }
 
-				var fileExtension = filePath.split('.').pop().toLowerCase();
-				var allowedImageTypes = ['png', 'jpg', 'jpeg', 'gif'];
-				var allowedPdfType = 'pdf';
+    var fullPath = 'assets/uploads/' + filePath;
+    var fileExtension = filePath.split('.').pop().toLowerCase();
 
-				// Hide both the image and iframe initially
-				$('#preview-image').hide();
-				$('#preview-pdf').hide();
+    var allowedImageTypes = ['png', 'jpg', 'jpeg', 'gif'];
+    var allowedPdfType = 'pdf';
+    var allowedVideoTypes = ['mp4', 'webm', 'ogg'];
+    var allowedAudioTypes = ['mp3', 'wav', 'ogg'];
+    var allowedDocTypes = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
+    var allowedTxtTypes = ['txt'];
 
-				if (allowedImageTypes.includes(fileExtension)) {
-					// Show image preview
-					$('#preview-image').attr('src', fullPath).show();
-					$('#image-preview-modal').fadeIn(); // Ensure the modal is shown
-				} else if (fileExtension === allowedPdfType) {
-					// Show PDF preview
-					$('#preview-pdf').attr('src', fullPath).show();
-					$('#image-preview-modal').fadeIn(); // Ensure the modal is shown
-				} else {
-					alert('Preview not available for this file type.');
-				}
-			});
+    // Hide all preview elements initially
+    $('#preview-image, #preview-pdf, #preview-video, #preview-audio, #preview-doc').hide();
+
+    if (allowedImageTypes.includes(fileExtension)) {
+        $('#preview-image').attr('src', fullPath).show();
+    } else if (fileExtension === allowedPdfType) {
+        // Open PDF in a new tab
+        window.open(fullPath, '_blank');
+        return; // Exit the function to prevent opening the modal
+    } else if (allowedVideoTypes.includes(fileExtension)) {
+        $('#preview-video').attr('src', fullPath).show();
+    } else if (allowedAudioTypes.includes(fileExtension)) {
+        $('#preview-audio').attr('src', fullPath).show();
+    } else if (allowedDocTypes.includes(fileExtension)) {
+        var officeViewerURL = "https://view.officeapps.live.com/op/view.aspx?src=" + encodeURIComponent(window.location.origin + '/deped-fms/deped-fms/' + fullPath);
+        var googleDocsURL = "https://docs.google.com/gview?url=" + encodeURIComponent(window.location.origin + '/deped-fms/deped-fms/' + fullPath) + "&embedded=true";
+
+        // Try Office Viewer first
+        var officeViewer = new Image();
+        officeViewer.src = officeViewerURL;
+        officeViewer.onload = function() {
+            $('#preview-doc').attr('src', officeViewerURL).show();
+        };
+        officeViewer.onerror = function() {
+            // If Office Viewer fails, use Google Docs Viewer
+            $('#preview-doc').attr('src', googleDocsURL).show();
+        };
+    } else if (allowedTxtTypes.includes(fileExtension)) {
+        $('#preview-doc').attr('src', fullPath).show();
+    } else {
+        alert('Preview not available for this file type.');
+        return;
+    }
+
+    $('#image-preview-modal').fadeIn();
+});
+
+            // end js to preview files
+
 
 			$('.rename_file').keypress(function(e) {
         var _this = $(this);
@@ -612,16 +631,16 @@ $(document).click(function() {
             });
         }
     });
-		});
+});
 
 
 	// Close the menu if the user clicks anywhere outside
 	$(document).click(function() {
-		$("div.custom-menu").remove();  // Remove the custom menu
+		$("div.custom-menu").remove();
 	});
 
 	$(document).ready(function() {
-    // Close modal when the close button (X) is clicked
+
     $('#image-preview-modal .close').click(function() {
         $('#image-preview-modal').fadeOut();  // Hide the modal
     });
@@ -630,9 +649,7 @@ $(document).click(function() {
     $('#image-preview-modal').click(function(event) {
         if ($(event.target).is('#image-preview-modal')) {
             $(this).fadeOut();  // Hide the modal when clicking outside of it
-        }
+            }
+        });
     });
-});
-
-
 </script>
