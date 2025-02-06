@@ -153,11 +153,11 @@ a.custom-menu-list span.icon{
             <?php endwhile; ?>
         </div>
         <?php else: ?>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-md-12">
                     <div class="alert alert-info">No Folders Found</div>
                 </div>
-            </div>
+            </div> -->
         <?php endif; ?>
 
         <hr>
@@ -181,7 +181,9 @@ a.custom-menu-list span.icon{
                             <tbody>
                                 <?php while ($row = $files->fetch_assoc()): ?>
                                 <tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
-                                    <td><large><span><i class="fa fa-file"></i></span><b class="to_file"> <?php echo $row['name'] ?></b></large></td>
+                                    <td><large><span><i class="fa fa-file"></i></span><b class="to_file"> <?php echo $row['name'] ?></b></large>
+                                    <input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['id'] ?>" data-type="<?php echo $row['file_type'] ?>" data-path="<?php echo $row['file_path'] ?>" style="display: none">
+                                    </td>
                                     <td><i class="to_file"><?php echo date('Y/m/d h:i A', strtotime($row['date_updated'])) ?></i></td>
                                     <td><i class="to_file"><?php echo $row['description'] ?></i></td>
                                     <td>
