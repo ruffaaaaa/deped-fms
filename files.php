@@ -11,13 +11,18 @@ $login_type = $_SESSION['login_type'] ?? null;
 
 if ($login_type == 1) {
     $folders = $conn->query("SELECT * FROM folders WHERE parent_id = $folder_parent ORDER BY name ASC");
-    $files = $conn->query("SELECT * FROM files WHERE folder_id = $folder_parent ORDER BY name ASC"); // Admin sees all files
+    $files = $conn->query("SELECT * FROM files WHERE folder_id = $folder_parent ORDER BY date_updated DESC, name ASC"); // Admin sees all files
 } else {
     $folders = $conn->query("SELECT * FROM folders WHERE parent_id = $folder_parent AND user_id = '$login_id' ORDER BY name ASC");
-    $files = $conn->query("SELECT * FROM files WHERE folder_id = $folder_parent AND user_id = '$login_id' ORDER BY name ASC");
+    $files = $conn->query("SELECT * FROM files WHERE folder_id = $folder_parent AND user_id = '$login_id' ORDER BY date_updated DESC, name ASC");
 }
 ?>
-<style>
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>FMS | Login</title>
+  <style>
 	.folder-item{
 		cursor: pointer;
 	}
@@ -34,58 +39,58 @@ if ($login_type == 1) {
 	    border-radius: 5px;
 	    padding: 8px;
 	    min-width: 13vw;
-}
-a.custom-menu-list {
-    width: 100%;
-    display: flex;
-    color: #4c4b4b;
-    font-weight: 600;
-    font-size: 1em;
-    padding: 1px 11px;
-}
-.file-item{
-	cursor: pointer;
-}
-a.custom-menu-list:hover,.file-item:hover,.file-item.active {
-    background: #80808024;
-}
-table th,td{
-	/*border-left:1px solid gray;*/
-}
-a.custom-menu-list span.icon{
-		width:1em;
-		margin-right: 5px
-}
+    }
+    a.custom-menu-list {
+        width: 100%;
+        display: flex;
+        color: #4c4b4b;
+        font-weight: 600;
+        font-size: 1em;
+        padding: 1px 11px;
+    }
+    .file-item{
+        cursor: pointer;
+    }
+    a.custom-menu-list:hover,.file-item:hover,.file-item.active {
+        background: #80808024;
+    }
+    table th,td{
+        /*border-left:1px solid gray;*/
+    }
+    a.custom-menu-list span.icon{
+            width:1em;
+            margin-right: 5px
+    }
 
-#image-preview-modal .modal-dialog {
-    max-width: 90%; /* Or any larger value you prefer */
-    width: 90%; /* Set the width of the modal dialog */
-}
+    #image-preview-modal .modal-dialog {
+        max-width: 90%; /* Or any larger value you prefer */
+        width: 90%; /* Set the width of the modal dialog */
+    }
 
-/* Modal body should be scrollable and allow for resizing */
-#image-preview-modal .modal-body {
-    max-height: 70vh; /* Set a maximum height to allow scrolling */
-    overflow-y: auto; /* Enable vertical scrolling */
-    display: flex; /* Allow the contents to resize properly */
-    justify-content: center; /* Center the content horizontally */
-}
+    /* Modal body should be scrollable and allow for resizing */
+    #image-preview-modal .modal-body {
+        max-height: 70vh; /* Set a maximum height to allow scrolling */
+        overflow-y: auto; /* Enable vertical scrolling */
+        display: flex; /* Allow the contents to resize properly */
+        justify-content: center; /* Center the content horizontally */
+    }
 
-/* Set width and height for the image and iframe to adjust accordingly */
-#preview-image {
-    width: 100%;  /* Take the full width of the modal body */
-    height: auto;  /* Maintain the aspect ratio */
-    object-fit: contain; /* Ensure the image fits inside the modal without stretching */
-    max-height: 80vh; /* Prevent the image from becoming too tall */
-}
+    /* Set width and height for the image and iframe to adjust accordingly */
+    #preview-image {
+        width: 100%;  /* Take the full width of the modal body */
+        height: auto;  /* Maintain the aspect ratio */
+        object-fit: contain; /* Ensure the image fits inside the modal without stretching */
+        max-height: 80vh; /* Prevent the image from becoming too tall */
+    }
 
-/* Specific styling for the PDF preview iframe */
-#preview-pdf {
-    width: 100%; /* Ensure the iframe takes the full width */
-    height: 80vh;  /* Adjust height for PDF preview to make it taller */
-}
+    /* Specific styling for the PDF preview iframe */
+    #preview-pdf {
+        width: 100%; /* Ensure the iframe takes the full width */
+        height: 80vh;  /* Adjust height for PDF preview to make it taller */
+    }
 
-/* start folder button icon */
-.icon-btn {
+    /* start folder button icon */
+    .icon-btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -105,12 +110,30 @@ a.custom-menu-list span.icon{
     }
 /* end folder button icon*/
 
-</style>
-<div class="container-fluid"><br><br>
+    .xs {
+        border-radius: 24px;
+        font-size: 12px;
+    }
+
+    .file-container {
+        margin: 10px;
+    }
+
+    .card-folder {
+        border-radius:24px;
+        background-color: #ffffff;
+
+    }
+    </style>
+
+
+  </head>
+
+<div class="file-container">
     <div class="col-lg-12">
         <div class="row">
-            <div class="card col-lg-12">
-                <div class="card-body" id="paths">
+            <div class="bg-white rounded-4xl m-2 col-lg-9 p-2 ">
+                <div class="pl-3" id="paths">
                 <?php 
                 $id = $folder_parent;
                 while ($id > 0) {
@@ -124,26 +147,30 @@ a.custom-menu-list span.icon{
                         $("#paths").prepend("<a href=\"index.php?page=files\">🏠︎</a>/")
                     </script>';
                 ?>
+                
                 </div>
             </div>
+            <button class="xs bg-gray-500 text-sm text-white my-2 mx-1 rounded-4xl sm:px-2 lg:px-[30px] " id="new_folder"><i class="fa fa-plus"></i> New Folder</button>
+            <button class="xs bg-gray-500 text-sm text-white my-2 mx-1 rounded-4xl sm:px-2 lg:px-[30px] " id="new_file"><i class="fa fa-upload"></i> Upload File</button>
         </div>
         <br>
 
-        <div class="row">
+        <!-- <div class="row">
             <button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> New Folder</button>
             <button class="btn btn-primary btn-sm ml-4" id="new_file"><i class="fa fa-upload"></i> Upload File</button>
-        </div>
-        <hr>
+        </div> -->
+
+        <!-- //folders -->
         <?php if ($folders->num_rows >0): ?>
-        <div class="row mt-3">
-            <div class="col-md-12"><h4><b>Folders</b></h4></div>
+        <div class="row">
+            <div class="col-md-12 -ml-2 uppercase font-bold"><h6><b>Folders</b></h6></div>
         </div>
         <div class="row">
             <?php while ($row = $folders->fetch_assoc()): ?>
-                <div class="col-md-3 col-sm-6 col-12 p-1" data-id="<?php echo $row['id'] ?>">
-                    <div class="card folder-item" data-id="<?php echo $row['id'] ?>">
+                <div class="col-md-4 rounded-lg col-sm-6 col-12 p-2" data-id="<?php echo $row['id'] ?>">
+                    <div class="bg-white rounded-xl folder-item" data-id="<?php echo $row['id'] ?>">
                         <div class="card-body d-flex justify-content-between">
-                            <large><span><i class="fa fa-folder"></i></span> <b class="to_folder"> <?php echo $row['name'] ?></b></large>
+                            <large><span><i class="fa fa-folder"></i></span> <b class="to_folder ml-2"> <?php echo $row['name'] ?></b></large>
                             <button class="icon-btn menu-btn"><i class="fa fa-ellipsis-v"></i></button>
 
                         </div>
@@ -160,13 +187,13 @@ a.custom-menu-list span.icon{
             </div> -->
         <?php endif; ?>
 
-        <hr>
+        <!-- //files -->
         <?php if ($files->num_rows > 0): ?>
         <div class="row mt-2">
-            <div class="col-md-12"><h4><b>Folders</b></h4></div>
+            <div class="col-md-12 -ml-2 uppercase font-bold"><h6><b>Files</b></h6></div>
         </div>
         <div class="row">
-            <div class="card col-md-12">
+            <div class="card-folder col-md-12 rounded-lg">
                 <div class="mt-2">
                     <div class="table-responsive"> <!-- Bootstrap responsive wrapper -->
                         <table class="table table-hover">

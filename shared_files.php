@@ -152,7 +152,7 @@ a.custom-menu-list span.icon{
 
 								<td>
 									<!-- Meatball menu (three vertical dots) -->
-									<button class="meatball-menu-btn" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>" data-path="<?php echo $row['file_path'] ?>"><i class="fa fa-ellipsis-h"></i></button>
+									<button class="meatball-menu-btn" style="display:flex; align-items: center" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>" data-path="<?php echo $row['file_path'] ?>"><i class="fa fa-ellipsis-h"></i></button>
 								</td>
 							</tr>
 							<?php endwhile; ?>

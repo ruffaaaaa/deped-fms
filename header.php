@@ -36,6 +36,7 @@
   <script src="assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="assets/font-awesome/js/all.min.js"></script>
   <script type="text/javascript" src="assets/js/jquery-te-1.4.0.min.js" charset="utf-8"></script>
+  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 
 
 
