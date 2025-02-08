@@ -20,6 +20,7 @@
     margin-top: 60px; /* Add some space from top */
     display: flex;
     flex-direction: column;
+    flex-grow: 1; /* Allow items to grow and push logout to bottom */
   }
 
   .nav-item {
@@ -40,6 +41,12 @@
 
   .icon-field {
     margin-right: 10px;
+  }
+
+  /* Logout at the bottom */
+  .logout-container {
+    margin-top: auto; /* Pushes logout to the bottom */
+    padding-bottom: 20px; /* Add some spacing */
   }
 
   /* Burger menu styles */
@@ -86,49 +93,60 @@
       display: block; /* Show the burger icon */
     }
   }
-
 </style>
 
+<!-- Burger Menu -->
 <div>
-<button class="burger-menu" id="burger-icon">
-  <i class="fa fa-bars"></i>
-</button>
+  <button class="burger-menu" id="burger-icon">
+    <i class="fa fa-bars"></i>
+  </button>
 </div>
 
 <!-- Sidebar -->
 <nav id="sidebar" class="bg-dark">
   <div class="sidebar-list">
+    <div class="text-white text-center py-3">
+      PANDONG
+    </div>
     <a href="index.php?page=home" class="nav-item nav-home">
       <span class="icon-field">
         <i class="fa fa-home"></i>
-      </span> Dashboard
+      </span>
+      <span class="ms-1 uppercase">Dashboard</span>
+
     </a>
     <a href="index.php?page=files" class="nav-item nav-files">
       <span class="icon-field">
         <i class="fa fa-file"></i>
-      </span> Files
+      </span>
+      <span class="ms-2 uppercase">Files</span>
     </a>
     <a href="index.php?page=shared_files" class="nav-item nav-shared_files">
       <span class="icon-field">
         <i class="fa fa-share-alt"></i>
-      </span> Shared Files
+      </span>
+      <span class="ms-2 uppercase">Shared Files</span>
     </a>
     <?php if (isset($_SESSION['login_type']) && $_SESSION['login_type'] == 1): ?>
       <a href="index.php?page=users" class="nav-item nav-users">
         <span class="icon-field">
           <i class="fa fa-users"></i>
-        </span> Users
+        </span>
+        <span class="ms-1 uppercase"> Users</span>
       </a>
     <?php endif; ?>
+  </div>
+
+  <!-- Logout Button at Bottom -->
+  <div class="logout-container">
     <a href="ajax.php?action=logout" class="nav-item logout-link d-flex align-items-center">
       <span class="icon-field">
         <i class="fa fa-power-off"></i>
       </span> 
-      <span class="ms-2"><?php echo htmlspecialchars($_SESSION['login_name'] ?? 'Logout'); ?></span>
+      <span class="ms-2">LOGOUT</span>
     </a>
   </div>
 </nav>
-
 
 <!-- Main content -->
 <div id="content">

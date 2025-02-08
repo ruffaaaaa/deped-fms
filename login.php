@@ -151,7 +151,7 @@
             </div>
             <form id="login-form">
               <div class="form-group">
-                <label for="username" class="control-label">Juber</label>
+                <label for="username" class="control-label">Username</label>
                 <input type="text" id="username" name="username" class="form-control" required>
               </div>
               <div class="form-group">

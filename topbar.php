@@ -40,25 +40,25 @@
     }
 </style>
 
-<nav class="navbar navbar-dark bg-dark fixed-top" style="padding:0;">
+<!-- <nav class="navbar navbar-dark bg-dark fixed-top" style="padding:0;">
     <div class="container-fluid mt-2 mb-2">
-        <div class="row w-100">
+        <div class="row w-100"> -->
             <!-- Logo Section -->
-            <div class="col-md-1 col-3 d-flex justify-content-center align-items-center">
+            <!-- <div class="col-md-1 col-3 d-flex justify-content-center align-items-center">
                 <div class="logo">
                     <i class="fa fa-share-alt"></i> 
                 </div>
-            </div>
-
+            </div> -->
+<!-- 
             <div class="col-md-8 col-6 d-flex justify-content-center align-items-center">
                 <p class="m-0 text-white">File Management System</p>
-            </div>
+            </div> -->
 
             <!-- <div class="col-md-3 col-3 d-flex justify-content-center align-items-center">
                 <a href="ajax.php?action=logout" class="logout-link">
                     <?php /* echo $_SESSION['login_name'] */ ?> <i class="fa fa-power-off"></i>
                 </a>
             </div> -->
-        </div>
+        <!-- </div>
     </div>
-</nav>
+</nav> -->

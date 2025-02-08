@@ -120,10 +120,29 @@ if ($login_type == 1) {
     }
 
     .card-folder {
-        border-radius:24px;
         background-color: #ffffff;
 
     }
+
+    .card-file {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    .new {
+        border-radius: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .button-text {
+            display: none; /* Hide text on mobile */
+        }
+    }
+
+
+    }
+
     </style>
 
 
@@ -131,9 +150,10 @@ if ($login_type == 1) {
 
 <div class="file-container">
     <div class="col-lg-12">
-        <div class="row">
-            <div class="bg-white rounded-4xl m-2 col-lg-9 p-2 ">
-                <div class="pl-3" id="paths">
+        <div class="container-fluid">
+            <div class="row d-flex align-items-center flex-wrap 0">
+                <!-- Path Display -->
+                <div class="pl-3 flex-grow-1 text-truncate bg-white rounded-4xl mr-2 mt-12 mt-md-0 p-2" id="paths">
                 <?php 
                 $id = $folder_parent;
                 while ($id > 0) {
@@ -147,29 +167,37 @@ if ($login_type == 1) {
                         $("#paths").prepend("<a href=\"index.php?page=files\">🏠︎</a>/")
                     </script>';
                 ?>
-                
+                </div>
+
+                <!-- Buttons (Hide text on mobile) -->
+                <div class="d-flex flex-wrap gap-2 mt-12 mt-md-0">
+                <button class="new bg-gray-500 text-sm text-white px-3 py-2 rounded-4xl" id="new_folder">
+                    <i class="fa fa-plus"></i> <span class="button-text">New Folder</span>
+                </button>
+                <button class="new bg-gray-500 text-sm text-white px-3 py-2 rounded-4xl" id="new_file">
+                    <i class="fa fa-upload"></i> <span class="button-text">Upload File</span>
+                </button>
                 </div>
             </div>
-            <button class="xs bg-gray-500 text-sm text-white my-2 mx-1 rounded-4xl sm:px-2 lg:px-[30px] " id="new_folder"><i class="fa fa-plus"></i> New Folder</button>
-            <button class="xs bg-gray-500 text-sm text-white my-2 mx-1 rounded-4xl sm:px-2 lg:px-[30px] " id="new_file"><i class="fa fa-upload"></i> Upload File</button>
         </div>
-        <br>
 
-        <!-- <div class="row">
-            <button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> New Folder</button>
-            <button class="btn btn-primary btn-sm ml-4" id="new_file"><i class="fa fa-upload"></i> Upload File</button>
-        </div> -->
+
+
+
+        <br>
 
         <!-- //folders -->
         <?php if ($folders->num_rows >0): ?>
         <div class="row">
-            <div class="col-md-12 -ml-2 uppercase font-bold"><h6><b>Folders</b></h6></div>
+            <div class="col-md-12 uppercase"><h6><b>Folders</b></h6></div>
         </div>
+        <p class="border-b-1 border-gray-400 ">
+        </p>
         <div class="row">
             <?php while ($row = $folders->fetch_assoc()): ?>
                 <div class="col-md-4 rounded-lg col-sm-6 col-12 p-2" data-id="<?php echo $row['id'] ?>">
-                    <div class="bg-white rounded-xl folder-item" data-id="<?php echo $row['id'] ?>">
-                        <div class="card-body d-flex justify-content-between">
+                    <div class="bg-white  rounded-xl folder-item mx-1" data-id="<?php echo $row['id'] ?>">
+                        <div class="card-file  d-flex justify-content-between">
                             <large><span><i class="fa fa-folder"></i></span> <b class="to_folder ml-2"> <?php echo $row['name'] ?></b></large>
                             <button class="icon-btn menu-btn"><i class="fa fa-ellipsis-v"></i></button>
 
@@ -190,12 +218,15 @@ if ($login_type == 1) {
         <!-- //files -->
         <?php if ($files->num_rows > 0): ?>
         <div class="row mt-2">
-            <div class="col-md-12 -ml-2 uppercase font-bold"><h6><b>Files</b></h6></div>
+            <div class="col-md-12  uppercase font-bold"><h6><b>Files</b></h6></div>
         </div>
+        <p class="border-b-1 border-gray-400 ">
+
+        </p>
         <div class="row">
-            <div class="card-folder col-md-12 rounded-lg">
-                <div class="mt-2">
-                    <div class="table-responsive"> <!-- Bootstrap responsive wrapper -->
+            <div class="col-md-12 ">
+                <div class="">
+                    <div class="card-folder table-responsive"> <!-- Bootstrap responsive wrapper -->
                         <table class="table table-hover">
                             <thead>
                                 <tr>

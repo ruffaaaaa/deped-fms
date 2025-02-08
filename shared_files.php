@@ -80,20 +80,25 @@ a.custom-menu-list span.icon{
 </style>
 <div class="container-fluid"><br><br>
 	<div class="col-lg-12">
-		<div class="row">
-			<div class="col-lg-12">
-			<div class="col-md-4 col-10 offset-md-4 offset-1 input-group">
-			<input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-			<div class="input-group-append">
-				<span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa fa-search"></i></span>
-			</div>
+		<div class="row d-flex align-items-center">
+		<!-- Title (Aligned Left) -->
+			<div class="col-auto uppercase">
+				<h4><b>Shared Files</b></h4>
 			</div>
 
+			<!-- Search Bar (Aligned Right) -->
+			<div class="col-md-6 col-8 ms-auto d-flex">
+				<input type="text" class="form-control" id="search" aria-label="Search">
+				<div class="input-group-append">
+				<span class="input-group-text"><i class="fa fa-search"></i></span>
+				</div>
 			</div>
 		</div>
-		<div class="row">
+
+
+		<!-- <div class="row">
 			<div class="col-md-12"><h4><b>Shared Files</b></h4></div>
-		</div>
+		</div> -->
 		<hr>
 		<div class="row">
 			<div class="card col-md-12">
