@@ -21,19 +21,29 @@
 	body{
         background: #80808045;
   }
+  .panel {
+    margin-top: 2.5rem;
+  }
+  @media (max-width: 768px) {
+    .panel {
+      margin-left: 0;
+      margin-top: 2.5rem !important;
+    }
+  }
 </style>
 
 <body>
-	<?php include 'topbar.php' ?>
+  <?php include 'topbar.php' ?>
 	<?php include 'navbar.php' ?>
   <div class="toast" id="alert_toast" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-body text-white">
     </div>
   </div>
-  <main id="view-panel" >
+  <main id="" class="panel ml-[250px]" >
       <?php $page = isset($_GET['page']) ? $_GET['page'] :'home'; ?>
   	<?php include $page.'.php' ?>
   	
+
 
   </main>
 

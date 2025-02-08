@@ -121,6 +121,7 @@ if ($login_type == 1) {
 
     .card-folder {
         background-color: #ffffff;
+        border-radius: 10px;
 
     }
 
@@ -227,7 +228,7 @@ if ($login_type == 1) {
             <div class="col-md-12 ">
                 <div class="">
                     <div class="card-folder table-responsive"> <!-- Bootstrap responsive wrapper -->
-                        <table class="table table-hover">
+                        <table class="table table-hover table-striped">
                             <thead>
                                 <tr>
                                     <th class="w-40">File Name</th>

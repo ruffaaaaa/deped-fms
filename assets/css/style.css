@@ -1646,10 +1646,12 @@ a.nav-item:hover, .nav-item.active {
 main#view-panel {
   margin-left: 250px;
   width: calc(100% - 250px);
-  margin-top: 3.5rem;
+  margin-top: 2rem;
   padding: .5em;
   transition: margin-left 0.3s ease, width 0.3s ease;
 }
+
+
 .toast{
   display: none;
   min-width: 20vw

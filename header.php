@@ -18,6 +18,8 @@
   <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
   <link href="assets/DataTables/datatables.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
 
 
   <!-- Template Main CSS File -->
@@ -37,6 +39,7 @@
     <script type="text/javascript" src="assets/font-awesome/js/all.min.js"></script>
   <script type="text/javascript" src="assets/js/jquery-te-1.4.0.min.js" charset="utf-8"></script>
   <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  
 
 
 

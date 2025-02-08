@@ -17,7 +17,6 @@
   .sidebar-list {
     list-style: none;
     padding: 0;
-    margin-top: 60px; /* Add some space from top */
     display: flex;
     flex-direction: column;
     flex-grow: 1; /* Allow items to grow and push logout to bottom */
@@ -46,7 +45,7 @@
   /* Logout at the bottom */
   .logout-container {
     margin-top: auto; /* Pushes logout to the bottom */
-    padding-bottom: 20px; /* Add some spacing */
+
   }
 
   /* Burger menu styles */
@@ -74,6 +73,16 @@
     margin-left: 0; /* Default margin */
   }
 
+  .hehe-title {
+    margin-bottom:0 !important
+  }
+
+  .image-logo-nav {
+    width: 20px;
+    height: 20px;
+    margin-right:10px;
+  }
+
   /* Media query for mobile */
   @media (max-width: 768px) {
     #sidebar {
@@ -92,6 +101,10 @@
     .burger-menu {
       display: block; /* Show the burger icon */
     }
+
+    .hehe-title {
+      margin-top:0;
+    }
   }
 </style>
 
@@ -105,41 +118,44 @@
 <!-- Sidebar -->
 <nav id="sidebar" class="bg-dark">
   <div class="sidebar-list">
-    <div class="text-white text-center py-3">
-      PANDONG
+    
+    <div class="text-white text-[13px] py-3 flex text-center justify-center">
+      <img src="/deped-fms/assets/img/Group 35.png" class="image-logo-nav">
+      <p class="hehe-title uppercase font-bold">FILE MANAGEMENT SYSTEM</p>
     </div>
-    <a href="index.php?page=home" class="nav-item nav-home">
+
+    <a href="index.php?page=home" class="nav-item nav-home py-3">
       <span class="icon-field">
         <i class="fa fa-home"></i>
       </span>
       <span class="ms-1 uppercase">Dashboard</span>
 
     </a>
-    <a href="index.php?page=files" class="nav-item nav-files">
+    <a href="index.php?page=files" class="nav-item nav-files py-3">
       <span class="icon-field">
         <i class="fa fa-file"></i>
       </span>
       <span class="ms-2 uppercase">Files</span>
     </a>
-    <a href="index.php?page=shared_files" class="nav-item nav-shared_files">
+    <a href="index.php?page=shared_files" class="nav-item nav-shared_files py-3">
       <span class="icon-field">
         <i class="fa fa-share-alt"></i>
       </span>
       <span class="ms-2 uppercase">Shared Files</span>
     </a>
     <?php if (isset($_SESSION['login_type']) && $_SESSION['login_type'] == 1): ?>
-      <a href="index.php?page=users" class="nav-item nav-users">
+      <a href="index.php?page=users" class="nav-item nav-users py-3">
         <span class="icon-field">
           <i class="fa fa-users"></i>
         </span>
-        <span class="ms-1 uppercase"> Users</span>
+        <span class="ms-1 uppercase "> Users</span>
       </a>
     <?php endif; ?>
   </div>
 
   <!-- Logout Button at Bottom -->
   <div class="logout-container">
-    <a href="ajax.php?action=logout" class="nav-item logout-link d-flex align-items-center">
+    <a href="ajax.php?action=logout" class="nav-item logout-link d-flex align-items-center py-3">
       <span class="icon-field">
         <i class="fa fa-power-off"></i>
       </span> 

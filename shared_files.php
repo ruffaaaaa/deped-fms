@@ -75,25 +75,97 @@ a.custom-menu-list span.icon{
     height: 80vh;  /* Adjust height for PDF preview to make it taller */
 }
 
+.form-control {
+	border-radius: 25px;
+}
+
+.filter {
+	border-top-right-radius: 25px; /* Round top-right corner */
+    border-bottom-right-radius: 25px; /* Round bottom-right corner */
+}
+
+.shared-container {
+     margin: 10px !important;
+
+}
+
+.card-files {
+	background-color: #ffffff;
+	border-radius: 10px;
+
+}
+
+.scrollable-table {
+    max-height: 400px; /* Set a max height to enable scrolling */
+    overflow-y: auto; /* Vertical scrolling */
+    overflow-x: auto; /* Horizontal scrolling for small screens */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for mobile */
+	border-radius: 10px;
+
+}
+
+/* Fix table header */
+.scrollable-table thead th {
+    position: sticky;
+    top: 0;
+    background: white; /* Keeps header visible */
+    z-index: 2; /* Ensures header stays above content */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .search-container {
+        width: 100%;
+    }
+    .search-container .input-group {
+        flex-wrap: nowrap;
+        width: 100%;
+    }
+    .search-container input {
+        flex-grow: 1; /* Makes input expand fully */
+        min-width: 0;
+    }
+    .search-container .input-group-text {
+        flex-shrink: 0; /* Prevents filter button from shrinking too much */
+        width: auto; /* Keep natural size */
+    }
+	.title-shared{
+		margin-top: 2rem;
+	}
+}
+
+
 
 
 </style>
-<div class="container-fluid"><br><br>
-	<div class="col-lg-12">
-		<div class="row d-flex align-items-center">
+<div class="shared-container">
+	<div class=" col-lg-12">
+		<div class=" row d-flex align-items-center m">
 		<!-- Title (Aligned Left) -->
-			<div class="col-auto uppercase">
-				<h4><b>Shared Files</b></h4>
+			<div class="col-auto text-uppercase text-xl">
+				<p class="title-shared"><b>Shared Files</b></p>
 			</div>
 
 			<!-- Search Bar (Aligned Right) -->
-			<div class="col-md-6 col-8 ms-auto d-flex">
-				<input type="text" class="form-control" id="search" aria-label="Search">
-				<div class="input-group-append">
-				<span class="input-group-text"><i class="fa fa-search"></i></span>
+			<div class="col-md-6 col-12 ms-auto search-container">
+				<div class="input-group">
+					<!-- Search Input -->
+					<input type="text" class="form-control rounded-pill pe-5" id="search"
+						aria-label="Search" placeholder="Search">
+
+					<!-- Search Icon Inside Input -->
+					<span class="position-absolute" style="right: 60px; top: 50%; transform: translateY(-50%); color: gray;">
+						<i class="fa fa-search"></i>
+					</span>
+
+					<!-- Filter Icon (Remains Next to Search) -->
+					<span class="input-group-text bg-white border rounded-pill ms-1" style="cursor: pointer;">
+						<i class="fa fa-filter"></i>
+					</span>  
 				</div>
 			</div>
 		</div>
+
 
 
 		<!-- <div class="row">
@@ -101,66 +173,46 @@ a.custom-menu-list span.icon{
 		</div> -->
 		<hr>
 		<div class="row">
-			<div class="card col-md-12">
-				<div class="card-body">
-					<!-- Scrollable container -->
-					<div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
-						<table width="100%" class="table-responsive">
-							<tr>
-								<th width="40%" class="">Filename</th>
-								<th width="20%" class="">Date</th>
-								<th width="20%" class="">Description</th>
-								<th width="20%" class="">Owner</th>
-								<th width="20%" class="">Action</th>
-							</tr>
-							<?php 
-							while($row=$files->fetch_assoc()):
-								$name = explode(' ||',$row['name']);
-								$name = isset($name[1]) ? $name[0] ." (".$name[1].").".$row['file_type'] : $name[0] .".".$row['file_type'];
-								$img_arr = array('png','jpg','jpeg','gif','psd','tif');
-								$doc_arr =array('doc','docx');
-								$pdf_arr =array('pdf','ps','eps','prn');
-								$icon ='fa-file';
-								if(in_array(strtolower($row['file_type']),$img_arr))
-									$icon ='fa-image';
-								if(in_array(strtolower($row['file_type']),$doc_arr))
-									$icon ='fa-file-word';
-								if(in_array(strtolower($row['file_type']),$pdf_arr))
-									$icon ='fa-file-pdf';
-								if(in_array(strtolower($row['file_type']),['xlsx','xls','xlsm','xlsb','xltm','xlt','xla','xlr']))
-									$icon ='fa-file-excel';
-								if(in_array(strtolower($row['file_type']),['zip','rar','tar']))
-									$icon ='fa-file-archive';
-							?>
-							<tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>" data-path="<?php echo $row['file_path'] ?>">
-								
-								<td><large><span><i class="fa <?php echo $icon ?>"></i></span><b class="to_file"> <?php echo $name ?></b></large>
-								<input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['id'] ?>" data-type="<?php echo $row['file_type'] ?>" data-path="<?php echo $row['file_path'] ?>" style="display: none">
-								</td>
-								<td><i class="to_file"><?php echo date('Y/m/d h:i A',strtotime($row['date_updated'])) ?></i></td>
-								<td><i class="to_file"><?php echo $row['description'] ?></i></td>
-								<td><i class="to_file">
-								<?php 
-									$query = "SELECT `name` FROM `users` WHERE id = " . $row['user_id'] . " ORDER BY name ASC";
-									$result = $conn->query($query);
-									
-									// Fetch the result
-									if ($result->num_rows > 0) {
-										$user = $result->fetch_assoc(); // Get the first (and probably only) row
-										echo $user['name'];  // Display the user's name
-									} else {
-										echo "Unknown";  // Handle case where no result is found
-									}
-									?>
-							</i></td>
-
-
-								<td>
-									<!-- Meatball menu (three vertical dots) -->
-									<button class="meatball-menu-btn" style="display:flex; align-items: center" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>" data-path="<?php echo $row['file_path'] ?>"><i class="fa fa-ellipsis-h"></i></button>
-								</td>
-							</tr>
-							<?php endwhile; ?>
+			<div class="col-md-12">
+				<div class="card-files rounded-xl">
+					<!-- Scrollable table container -->
+					<div class="scrollable-table">
+						<table class="table table-hover table-striped">
+							<thead>
+								<tr>
+									<th width="40%">Filename</th>
+									<th width="20%">Date</th>
+									<th width="20%">Description</th>
+									<th width="20%">Owner</th>
+									<th width="20%">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php while ($row = $files->fetch_assoc()): ?>
+								<tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
+									<td><large><span><i class="fa fa-file"></i></span><b class="to_file"> <?php echo $row['name'] ?></b></large>
+                                    <input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['id'] ?>" data-type="<?php echo $row['file_type'] ?>" data-path="<?php echo $row['file_path'] ?>" style="display: none">
+                                    </td>
+									<td><i class="to_file"><?php echo date('Y/m/d h:i A', strtotime($row['date_updated'])) ?></i></td>
+									<td><i class="to_file"><?php echo $row['description'] ?></i></td>
+									<td>
+										<i class="to_file">
+											<?php 
+												$query = "SELECT `name` FROM `users` WHERE id = " . $row['user_id'];
+												$result = $conn->query($query);
+												echo ($result->num_rows > 0) ? $result->fetch_assoc()['name'] : "Unknown";
+											?>
+										</i>
+									</td>
+									<td>
+										<!-- Meatball menu (three vertical dots) -->
+										<button class="meatball-menu-btn" data-id="<?php echo $row['id'] ?>" data-name="<?php echo $row['name'] ?>" data-path="<?php echo $row['file_path'] ?>">
+											<i class="fa fa-ellipsis-h"></i>
+										</button>
+									</td>
+								</tr>
+								<?php endwhile; ?>
+							</tbody>
 						</table>
 					</div>
 				</div>
