@@ -44,11 +44,19 @@
 .new {
 	border-radius: 20px;
 }
+
+@media (max-width: 768px) {
+    
+	.hehe {
+        margin-top: 30px;
+    }
+}
+
 </style>
 
 <div class="users-container">
     <div class="row">
-        <div class="col-lg-12">
+        <div class="hehe col-lg-12">
             <button class="new bg-gray-500 text-sm text-white px-3 py-2  float-right " id="new_user">
                 <i class="fa fa-plus"></i> New User
             </button>
@@ -58,7 +66,7 @@
         </div>
     </div>
     <br>
-    <div class="row">
+    <div class="users row">
         <div class="col-lg-12">
             <div class="card-users">
                 <!-- Scrollable table container -->

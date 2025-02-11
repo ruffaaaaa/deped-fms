@@ -389,25 +389,22 @@ a.custom-menu-list span.icon{
     }
 
 });
-	$(document).ready(function(){
-		$('#search').keyup(function(){
-			var _f = $(this).val().toLowerCase()
-			$('.to_folder').each(function(){
-				var val  = $(this).text().toLowerCase()
-				if(val.includes(_f))
-					$(this).closest('.card').toggle(true);
-					else
-					$(this).closest('.card').toggle(false);
-			})
-			$('.to_file').each(function(){
-				var val  = $(this).text().toLowerCase()
-				if(val.includes(_f))
-					$(this).closest('tr').toggle(true);
-					else
-					$(this).closest('tr').toggle(false);
-			})
-		})
-	})
+$(document).ready(function() {
+    $('#search').keyup(function() {
+        var searchVal = $(this).val().toLowerCase();
+
+        $('tbody tr').each(function() {
+            var rowText = $(this).text().toLowerCase(); // Get all text inside the row
+            
+            if (rowText.includes(searchVal)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+});
+
 	function delete_file($id){
 		start_load();
 		$.ajax({
