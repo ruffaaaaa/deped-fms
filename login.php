@@ -61,22 +61,26 @@
       height: auto;
     }
 
-    .card {
+    .login-body {
       width: 100%;
-      max-width: 400px;
-      padding: 1.5rem;
+      max-width: 480px;
+      padding: 4rem;
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .card-body {
       display: flex;
       flex-direction: column;
+      height:75%;
+      justify-content: center;
     }
+
+    /* .login-body {
+      
+    } */
 
     .form-group {
       margin-bottom: 1rem;
+      
     }
 
     .form-group label {
@@ -87,7 +91,7 @@
 
     .form-group input {
       width: 100%;
-      padding: 0.5rem;
+      padding: 1.5rem;
       border: 1px solid #ccc;
       border-radius: 4px;
       font-size: 1rem;
@@ -97,10 +101,12 @@
       background-color: #ff6600;
       border: none;
       color: white;
-      padding: 0.5rem;
+      padding: 1rem;
       border-radius: 4px;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      margin-top: 4rem;
+      
     }
 
     .btn-primary:hover {
@@ -133,6 +139,7 @@
         max-width: 60%;
       }
     }
+
   </style>
 
   <body>
@@ -144,21 +151,23 @@
       </div>
 
       <div id="login-right">
-        <div class="card">
-          <div class="card-body">
-            <div style="color: #ff6600; text-align: center; font-weight: bolder; font-size: 20px;">
-              <p>File Management System</p>
+        <div class="login-body">
+          <div class="">
+            <div style="text-align: center; font-weight: bolder; font-size: 20px;">
+              <p class="text-[26px] uppercase" style="margin-bottom: 2rem" >File Management System</p>
             </div>
             <form id="login-form">
               <div class="form-group">
-                <label for="username" class="control-label">Username</label>
-                <input type="text" id="username" name="username" class="form-control" required>
+                <input type="text" id="username" name="username" class="form-control rounded-pill" placeholder="Username" required>
               </div>
               <div class="form-group">
-                <label for="password" class="control-label">Password</label>
-                <input type="password" id="password" name="password" class="form-control" required>
+                <input type="password" id="password" name="password" class="form-control rounded-pill" placeholder="Password" required>
               </div>
-              <center><button type="submit" class="btn-sm btn-block btn-wave col-md-4 btn-primary">Login</button></center>
+              <center>
+                <button type="submit" class="btn-sm btn-block btn-wave col-md-12 rounded-pill btn-primary">
+                  Login
+                </button>
+              </center>
             </form>
           </div>
         </div>
